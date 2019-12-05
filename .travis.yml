@@ -11,4 +11,3 @@ matrix:
       before_install: pip install pytest
       install: pip install .
       script: pytest test
-
