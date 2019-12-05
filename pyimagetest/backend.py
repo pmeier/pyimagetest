@@ -12,13 +12,15 @@ except ImportError:
     IMAGEIO_AVAILABLE = False
 
 try:
-    from PIL import Image as PIL_Image, ImageFile as PIL_ImageFile
+    from PIL import Image, ImageFile as _ImageFile
 
+    PILImageFile = _ImageFile.ImageFile
     PIL_AVAILABLE = True
 except ImportError:
+    PILImageFile = None
     PIL_AVAILABLE = False
 
-ImageType = Union[np.ndarray, PIL_ImageFile.ImageFile]
+ImageType = Union[np.ndarray, PILImageFile]
 
 __all__ = ["ImageBackend", "ImageioBackend", "PILBackend", "builtin_image_backends"]
 
@@ -55,13 +57,13 @@ class ImageioBackend(ImageBackend):
 
 class PILBackend(ImageBackend):
     @property
-    def native_image_type(self) -> Type[PIL_ImageFile.ImageFile]:
-        return PIL_ImageFile.ImageFile
+    def native_image_type(self) -> Type[PILImageFile]:
+        return PILImageFile
 
-    def import_image(self, file: str) -> PIL_ImageFile.ImageFile:
-        return PIL_Image.open(file)
+    def import_image(self, file: str) -> PILImageFile:
+        return Image.open(file)
 
-    def export_image(self, image: PIL_ImageFile.ImageFile) -> np.ndarray:
+    def export_image(self, image: PILImageFile) -> np.ndarray:
         mode = image.mode
         image = np.asarray(image, dtype=np.float32)
         if mode in ("L", "RGB"):
