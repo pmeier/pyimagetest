@@ -1,2 +1,2 @@
 from .backend import *
-from .image_tester import *
+from .image_testcase import *

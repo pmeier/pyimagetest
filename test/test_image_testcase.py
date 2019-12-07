@@ -1,10 +1,10 @@
 import unittest
 from os import path
 from itertools import combinations
-from pyimagetest import ImageTester
+from pyimagetest import ImageTestcase
 
 
-class Tester(ImageTester, unittest.TestCase):
+class Tester(ImageTestcase, unittest.TestCase):
     @property
     def default_test_image_file(self) -> str:
         # The test image was downloaded from

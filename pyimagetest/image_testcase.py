@@ -4,10 +4,10 @@ from collections import OrderedDict
 import numpy as np
 from .backend import ImageBackend, builtin_image_backends
 
-__all__ = ["ImageTester"]
+__all__ = ["ImageTestcase"]
 
 
-class ImageTester(ABC):
+class ImageTestcase(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.backends = OrderedDict()
