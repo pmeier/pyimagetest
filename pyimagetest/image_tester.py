@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 from collections import OrderedDict
-from itertools import combinations
 import numpy as np
 from .backend import ImageBackend, builtin_image_backends
 
@@ -55,16 +54,3 @@ class ImageTester(ABC):
             if image in backend:
                 return name
         raise RuntimeError
-
-    def test_io(self) -> None:
-        if len(self.backends) < 2:
-            self.skipTest(
-                "Skipping I/O test, since fewer than 2 backends are available."
-            )
-
-        for backend1, backend2 in combinations(self.backends.values(), 2):
-            image1 = self.load_image(backend1)
-            image2 = self.load_image(backend2)
-            self.assertImagesAlmostEqual(
-                image1, image2, image1_backend=backend1, image2_backend=backend2
-            )
