@@ -6,21 +6,20 @@ import numpy as np
 try:
     import imageio
 
-    IMAGEIO_AVAILABLE = True
+    imageioImageType = np.ndarray
 except ImportError:
     imageio = None
-    IMAGEIO_AVAILABLE = False
+    imageioImageType = None
 
 try:
-    from PIL import Image, ImageFile as _ImageFile
+    from PIL import Image
 
-    PILImageFile = _ImageFile.ImageFile
-    PIL_AVAILABLE = True
+    PILImageType = Image.Image
 except ImportError:
-    PILImageFile = None
-    PIL_AVAILABLE = False
+    Image = None
+    PILImageType = None
 
-ImageType = Union[np.ndarray, PILImageFile]
+ImageType = Union[imageioImageType, PILImageType]
 
 __all__ = ["ImageBackend", "ImageioBackend", "PILBackend", "builtin_image_backends"]
 
@@ -45,25 +44,25 @@ class ImageBackend(ABC):
 
 class ImageioBackend(ImageBackend):
     @property
-    def native_image_type(self) -> Type[np.ndarray]:
-        return np.ndarray
+    def native_image_type(self) -> Type[imageioImageType]:
+        return imageioImageType
 
-    def import_image(self, file: str) -> np.ndarray:
+    def import_image(self, file: str) -> imageioImageType:
         return imageio.imread(file)
 
-    def export_image(self, image: np.ndarray) -> np.ndarray:
+    def export_image(self, image: imageioImageType) -> np.ndarray:
         return image.astype(np.float32) / 255.0
 
 
 class PILBackend(ImageBackend):
     @property
-    def native_image_type(self) -> Type[PILImageFile]:
-        return PILImageFile
+    def native_image_type(self) -> Type[PILImageType]:
+        return PILImageType
 
-    def import_image(self, file: str) -> PILImageFile:
+    def import_image(self, file: str) -> PILImageType:
         return Image.open(file)
 
-    def export_image(self, image: PILImageFile) -> np.ndarray:
+    def export_image(self, image: PILImageType) -> np.ndarray:
         mode = image.mode
         image = np.asarray(image, dtype=np.float32)
         if mode in ("L", "RGB"):
@@ -75,8 +74,8 @@ class PILBackend(ImageBackend):
 
 BUILTIN_IMAGE_BACKENDS = OrderedDict(
     [
-        ("imageio", ImageioBackend() if IMAGEIO_AVAILABLE else None),
-        ("PIL", PILBackend() if PIL_AVAILABLE else None),
+        ("imageio", ImageioBackend() if imageioImageType is not None else None),
+        ("PIL", PILBackend() if PILImageType is not None else None),
     ]
 )
 
