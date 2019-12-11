@@ -19,7 +19,7 @@ setup(
     description="Utilities for unit testing with images.",
     version="0.1",
     url="https://github.com/pmeier/pyimagetest",
-    license="BSD-3",
+    license="GPLv3",
     author="Philip Meier",
     author_email="github.pmeier@posteo.de",
     long_description=long_description,
