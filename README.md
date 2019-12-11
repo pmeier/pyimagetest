@@ -24,7 +24,7 @@ class Tester(pyimagetest.ImageTestcase, unittest.TestCase):
     def default_test_image_file(self):
         return "path/to/default/test/image/file"
     
-    def simple_test(self):
+    def test_io(self):
         imageio_image = self.load_image("imageio")
         pil_image = self.load_image("PIL")
         self.assertImagesAlmostEqual(imageio_image, pil_image)
