@@ -21,13 +21,23 @@ except ImportError:
 
 ImageType = Union[imageioImageType, PILImageType]
 
-__all__ = ["ImageBackend", "ImageioBackend", "PILBackend", "builtin_image_backends"]
+__all__ = ["ImageBackend", "builtin_image_backends"]
 
 
 class ImageBackend(ABC):
+    """ABC for ImageBackends. Each subclass has to implement the native ImageType and
+    basic I/O methods.
+    """
+
     @property
     @abstractmethod
     def native_image_type(self) -> Type[ImageType]:
+        """Returns the native ImageType of the backend. This is used to infer the
+        specific `ImageBackend` for a given `ImageType`
+
+        Returns:
+            Type[ImageType]
+        """
         pass
 
     def __contains__(self, image) -> bool:
@@ -35,14 +45,36 @@ class ImageBackend(ABC):
 
     @abstractmethod
     def import_image(self, file: str) -> ImageType:
+        """Imports an image into the specific image type of the backend.
+
+        Args:
+            file (str): Path to the file that should be imported.
+
+        Returns:
+            ImageType
+        """
         pass
 
     @abstractmethod
     def export_image(self, image: ImageType) -> np.ndarray:
+        """Exports an image of the specific image type of the backend into a
+        numpy.ndarray. The array should be of size height x width x channels (HxWxC) and
+        be of type np.float32.
+
+        Args:
+            image (ImageType): Image object
+
+        Returns:
+            np.ndarray
+        """
         pass
 
 
 class ImageioBackend(ImageBackend):
+    """
+    `ImageBackend for the `imageio <https://imageio.github.io/>`_ package.
+    """
+
     @property
     def native_image_type(self) -> Type[imageioImageType]:
         return imageioImageType
@@ -55,6 +87,10 @@ class ImageioBackend(ImageBackend):
 
 
 class PILBackend(ImageBackend):
+    """
+    `ImageBackend for the `PIL (Pillow) <https://python-pillow.org/`_ package.
+    """
+
     @property
     def native_image_type(self) -> Type[PILImageType]:
         return PILImageType
@@ -81,6 +117,11 @@ BUILTIN_IMAGE_BACKENDS = OrderedDict(
 
 
 def builtin_image_backends():
+    """Returns all builtin image backends, which are available.
+
+    Returns:
+        OrderedDict[str, Backend]
+    """
     return OrderedDict(
         [
             (name, backend)
