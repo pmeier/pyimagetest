@@ -29,6 +29,14 @@ class ImageTestcase(ABC):
     def _add_builtin_image_backends(self) -> None:
         self.backends.update(builtin_image_backends())
 
+    def remove_image_backend(self, name: str) -> None:
+        """Removes an image backend from the known backends
+
+        Args:
+            name(str): Name of the backend
+        """
+        del self.backends[name]
+
     @property
     @abstractmethod
     def default_test_image_file(self) -> str:
