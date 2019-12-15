@@ -10,8 +10,7 @@ testing_requires = ("imageio", "pillow", "torchvision")
 classifiers = (
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Testing :: Unit",
 )
@@ -21,7 +20,7 @@ setup(
     description="Utilities for unit testing with images.",
     version="0.1",
     url="https://github.com/pmeier/pyimagetest",
-    license="GPLv3",
+    license="BSD-3",
     author="Philip Meier",
     author_email="github.pmeier@posteo.de",
     long_description=long_description,
