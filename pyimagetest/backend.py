@@ -19,7 +19,16 @@ except ImportError:
     Image = None
     PILImageType = None
 
-ImageType = Union[imageioImageType, PILImageType]
+try:
+    import torch
+    import torchvision
+
+    torchvisionImageType = torch.FloatTensor
+except ImportError:
+    torchvisionImageType = None
+
+
+ImageType = Union[imageioImageType, PILImageType, torchvisionImageType]
 
 __all__ = ["ImageBackend", "builtin_image_backends"]
 
@@ -108,10 +117,31 @@ class PILBackend(ImageBackend):
         return image
 
 
+class TorchvisionBackend(ImageBackend):
+    """
+    `ImageBackend for the `torchvision <https://pytorch.org/`_ package.
+    """
+
+    @property
+    def native_image_type(self) -> Type[torchvisionImageType]:
+        return torchvisionImageType
+
+    def import_image(self, file: str) -> torchvisionImageType:
+        pil_image = Image.open(file)
+        return torchvision.transforms.functional.to_tensor(pil_image)
+
+    def export_image(self, image: torchvisionImageType) -> np.ndarray:
+        return image.detach().cpu().permute((1, 2, 0)).numpy()
+
+
 BUILTIN_IMAGE_BACKENDS = OrderedDict(
     [
         ("imageio", ImageioBackend() if imageioImageType is not None else None),
         ("PIL", PILBackend() if PILImageType is not None else None),
+        (
+            "torchvision",
+            TorchvisionBackend() if torchvisionImageType is not None else None,
+        ),
     ]
 )
 

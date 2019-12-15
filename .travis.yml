@@ -12,6 +12,6 @@ matrix:
       install: pip install .
       script: pytest test
     - name: "Tests w/ backends"
-      before_install: pip install pytest imageio pillow
+      before_install: pip install pytest imageio pillow torchvision
       install: pip install .
       script: pytest test
