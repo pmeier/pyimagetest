@@ -5,6 +5,8 @@ with open("README.md", "r") as fh:
 
 install_requires = ("numpy",)
 
+testing_requires = ("imageio", "pillow", "torchvision")
+
 classifiers = (
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -26,6 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=("test",)),
     install_requires=install_requires,
+    extras_require={"testing": testing_requires},
     python_requires=">=3.6",
     classifiers=classifiers,
 )
