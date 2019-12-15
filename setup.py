@@ -18,7 +18,7 @@ classifiers = (
 setup(
     name="pyimagetest",
     description="Utilities for unit testing with images.",
-    version="0.1",
+    version="0.2dev",
     url="https://github.com/pmeier/pyimagetest",
     license="BSD-3",
     author="Philip Meier",
