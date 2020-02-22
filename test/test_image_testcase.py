@@ -1,11 +1,11 @@
-import unittest
 from os import path
 from itertools import combinations
+import unittest
 from pyimagetest import ImageTestcase
 from pyimagetest.backend import BUILTIN_IMAGE_BACKENDS
 
 
-class Tester(ImageTestcase, unittest.TestCase):
+class Tester(ImageTestcase):
     def default_image_file(self) -> str:
         # The test image was downloaded from
         # http://www.r0k.us/graphics/kodak/kodim15.html

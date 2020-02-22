@@ -1,13 +1,13 @@
-from abc import ABC
 from typing import Any, Union, Optional
 from collections import OrderedDict
+import unittest
 import numpy as np
 from .backend import ImageBackend, builtin_image_backends
 
 __all__ = ["ImageTestcase"]
 
 
-class ImageTestcase(ABC):
+class ImageTestcase(unittest.TestCase):
     """Utility class for unit testing with images. This class is meant for double
     inheritance together with unittest.Testcase.
     """
