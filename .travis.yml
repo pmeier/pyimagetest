@@ -3,11 +3,13 @@ python: "3.6"
 
 matrix:
   include:
-    - name: "Formatting"
+    - name: "Format"
       before_install: pip install black
       install: skip
       script: black --check .
-    - name: "Testing"
-      before_install: pip install pytest
+    - name: "Tests"
+      before_install: pip install pytest coverage codecov
       install: pip install .[testing]
-      script: pytest test
+      script: coverage run -m pytest test/
+      after success: codecov
+
