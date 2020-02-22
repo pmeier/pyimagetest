@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Any, Union, Optional
 from collections import OrderedDict
 import numpy as np
@@ -37,17 +37,26 @@ class ImageTestcase(ABC):
         """
         del self.backends[name]
 
+    def default_image_backend(self) -> Optional[Union[ImageBackend, str]]:
+        return None
+
     @property
-    @abstractmethod
-    def default_test_image_file(self) -> str:
+    def has_default_image_backend(self) -> bool:
+        return self.default_image_backend() is not None
+
+    def default_image_file(self) -> Optional[str]:
         """Returns the path to the default test image file
         Returns:
             str
         """
-        pass
+        return None
+
+    @property
+    def has_default_image_file(self) -> bool:
+        return self.default_image_file() is not None
 
     def load_image(
-        self, backend: Union[ImageBackend, str], file: Optional[str] = None
+        self, backend: Optional[Union[ImageBackend, str]], file: Optional[str] = None
     ) -> Any:
         """Loads an image with the given image backend. If no file is given, the
         default test image is loaded.
@@ -60,10 +69,31 @@ class ImageTestcase(ABC):
         Returns:
             Any
         """
-        if isinstance(backend, str):
-            backend = self.backends[backend]
-        if file is None:
-            file = self.default_test_image_file
+
+        def parse_backend(backend: Optional[Union[ImageBackend, str]]) -> ImageBackend:
+            if isinstance(backend, ImageBackend):
+                return backend
+            elif isinstance(backend, str):
+                return self.backends[backend]
+            elif backend is None:
+                if not self.has_default_image_backend:
+                    raise RuntimeError
+                return self.default_image_backend()
+            else:
+                raise TypeError
+
+        def parse_file(file: Optional[str]) -> str:
+            if isinstance(file, str):
+                return file
+            elif file is None:
+                if not self.has_default_image_file:
+                    raise RuntimeError
+                return self.default_image_file()
+            else:
+                raise TypeError
+
+        backend = parse_backend(backend)
+        file = parse_file(file)
         return backend.import_image(file)
 
     def assertImagesAlmostEqual(
