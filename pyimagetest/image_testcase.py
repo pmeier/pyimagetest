@@ -1,5 +1,4 @@
 from typing import Any, Union, Optional
-from collections import OrderedDict
 import unittest
 import numpy as np
 from .backend import ImageBackend, builtin_image_backends
@@ -14,8 +13,7 @@ class ImageTestcase(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.backends = OrderedDict()
-        self._add_builtin_image_backends()
+        self.backends = builtin_image_backends()
 
     def add_image_backend(self, name: str, backend: ImageBackend) -> None:
         """Adds custom image backend to the list of available backends.
@@ -25,9 +23,6 @@ class ImageTestcase(unittest.TestCase):
             backend (ImageBackend): Backend
         """
         self.backends[name] = backend
-
-    def _add_builtin_image_backends(self) -> None:
-        self.backends.update(builtin_image_backends())
 
     def remove_image_backend(self, name: str) -> None:
         """Removes an image backend from the known backends
@@ -73,12 +68,14 @@ class ImageTestcase(unittest.TestCase):
         def parse_backend(backend: Optional[Union[ImageBackend, str]]) -> ImageBackend:
             if isinstance(backend, ImageBackend):
                 return backend
-            elif isinstance(backend, str):
-                return self.backends[backend]
             elif backend is None:
-                if not self.has_default_image_backend:
+                default_backend = self.default_image_backend()
+                if default_backend is None:
                     raise RuntimeError
-                return self.default_image_backend()
+                backend = default_backend
+
+            if isinstance(backend, str):
+                return self.backends[backend]
             else:
                 raise TypeError
 
@@ -86,9 +83,10 @@ class ImageTestcase(unittest.TestCase):
             if isinstance(file, str):
                 return file
             elif file is None:
-                if not self.has_default_image_file:
+                default_file = self.default_image_file()
+                if default_file is None:
                     raise RuntimeError
-                return self.default_image_file()
+                return default_file
             else:
                 raise TypeError
 
@@ -101,8 +99,8 @@ class ImageTestcase(unittest.TestCase):
         image1: Any,
         image2: Any,
         mean_abs_tolerance: float = 1e-2,
-        image1_backend: Optional[ImageBackend] = None,
-        image2_backend: Optional[ImageBackend] = None,
+        backend1: Optional[Union[ImageBackend, str]] = None,
+        backend2: Optional[Union[ImageBackend, str]] = None,
     ):
         """This test verifies that the two images are almost equal.
 
@@ -110,29 +108,35 @@ class ImageTestcase(unittest.TestCase):
             image1 (Any): Image 1
             image2 (Any): Image 2
             mean_abs_tolerance: Acceptable mean absolute tolerance (MAE)
-            image1_backend (Union[ImageBackend, str]): Backend or backend name for
+            backend1 (Union[ImageBackend, str]): Backend or backend name for
                 image 1. If None, the backend is inferred automatically from the image.
-            image2_backend (Union[ImageBackend, str]): Backend or backend name for
+            backend2 (Union[ImageBackend, str]): Backend or backend name for
                 image 2. If None, the backend is inferred automatically from the image.
         """
-        if isinstance(image1_backend, str):
-            image1_backend = self.backends[image1_backend]
-        elif image1_backend is None:
-            image1_backend = self.infer_image_backend(image1)
 
-        if isinstance(image2_backend, str):
-            image2_backend = self.backends[image2_backend]
-        elif image2_backend is None:
-            image2_backend = self.infer_image_backend(image2)
+        def parse_backend(
+            backend: Optional[Union[ImageBackend, str]], image: Any
+        ) -> ImageBackend:
+            if isinstance(backend, ImageBackend):
+                return backend
+            elif isinstance(backend, str):
+                return self.backends[backend]
+            elif backend is None:
+                return self.infer_image_backend(image)
+            else:
+                raise RuntimeError
 
-        image1 = image1_backend.export_image(image1)
-        image2 = image2_backend.export_image(image2)
+        backend1 = parse_backend(backend1, image1)
+        backend2 = parse_backend(backend2, image2)
+
+        image1 = backend1.export_image(image1)
+        image2 = backend2.export_image(image2)
 
         actual = np.mean(np.abs(image1 - image2))
         desired = 0.0
         np.testing.assert_allclose(actual, desired, atol=mean_abs_tolerance, rtol=0.0)
 
-    def infer_image_backend(self, image: Any) -> str:
+    def infer_image_backend(self, image: Any) -> ImageBackend:
         """Infers the corresponding backend from the image.
 
         Args:

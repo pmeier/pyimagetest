@@ -7,9 +7,13 @@ matrix:
       before_install: pip install black
       install: skip
       script: black --check .
+    - name: "Type checks"
+      before install: pip install mypy numpy git+https://github.com/numpy/numpy-stubs torch
+      install: pip install .
+      script: mypy --config-file=mypy.ini pyimagetest/
     - name: "Tests"
       before_install: pip install pytest coverage codecov
       install: pip install .[testing]
-      script: coverage run -m pytest test/
+      script: coverage run --rcfile=.coveragerc -m pytest test/
       after success: codecov
 

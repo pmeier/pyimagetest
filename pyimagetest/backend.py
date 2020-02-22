@@ -1,34 +1,23 @@
 from abc import ABC, abstractmethod
-from typing import Type, Union
+from typing import Any, Type
 from collections import OrderedDict
 import numpy as np
 
 try:
     import imageio
-
-    imageioImageType = np.ndarray
 except ImportError:
-    imageio = None
-    imageioImageType = None
+    pass
 
 try:
     from PIL import Image
-
-    PILImageType = Image.Image
 except ImportError:
-    Image = None
-    PILImageType = None
+    pass
 
 try:
     import torch
-    import torchvision
-
-    torchvisionImageType = torch.FloatTensor
 except ImportError:
-    torchvisionImageType = None
+    pass
 
-
-ImageType = Union[imageioImageType, PILImageType, torchvisionImageType]
 
 __all__ = ["ImageBackend", "builtin_image_backends"]
 
@@ -40,7 +29,7 @@ class ImageBackend(ABC):
 
     @property
     @abstractmethod
-    def native_image_type(self) -> Type[ImageType]:
+    def native_image_type(self) -> Type[Any]:
         """Returns the native ImageType of the backend. This is used to infer the
         specific `ImageBackend` for a given `ImageType`
 
@@ -53,7 +42,7 @@ class ImageBackend(ABC):
         return isinstance(image, self.native_image_type)
 
     @abstractmethod
-    def import_image(self, file: str) -> ImageType:
+    def import_image(self, file: str) -> Any:
         """Imports an image into the specific image type of the backend.
 
         Args:
@@ -65,7 +54,7 @@ class ImageBackend(ABC):
         pass
 
     @abstractmethod
-    def export_image(self, image: ImageType) -> np.ndarray:
+    def export_image(self, image: Any) -> np.ndarray:
         """Exports an image of the specific image type of the backend into a
         numpy.ndarray. The array should be of size height x width x channels (HxWxC) and
         be of type np.float32.
@@ -84,14 +73,19 @@ class ImageioBackend(ImageBackend):
     `ImageBackend for the `imageio <https://imageio.github.io/>`_ package.
     """
 
+    def __init__(self):
+        import imageio
+
+        self._imageio = imageio
+
     @property
-    def native_image_type(self) -> Type[imageioImageType]:
-        return imageioImageType
+    def native_image_type(self) -> Type[np.ndarray]:
+        return np.ndarray
 
-    def import_image(self, file: str) -> imageioImageType:
-        return imageio.imread(file)
+    def import_image(self, file: str) -> np.ndarray:
+        return self._imageio.imread(file)
 
-    def export_image(self, image: imageioImageType) -> np.ndarray:
+    def export_image(self, image: np.ndarray) -> np.ndarray:
         return image.astype(np.float32) / 255.0
 
 
@@ -100,14 +94,19 @@ class PILBackend(ImageBackend):
     `ImageBackend for the `PIL (Pillow) <https://python-pillow.org/`_ package.
     """
 
+    def __init__(self):
+        from PIL import Image
+
+        self._Image = Image
+
     @property
-    def native_image_type(self) -> Type[PILImageType]:
-        return PILImageType
+    def native_image_type(self) -> Type[Image.Image]:
+        return self._Image.Image
 
-    def import_image(self, file: str) -> PILImageType:
-        return Image.open(file)
+    def import_image(self, file: str) -> Image.Image:
+        return self._Image.open(file)
 
-    def export_image(self, image: PILImageType) -> np.ndarray:
+    def export_image(self, image: Image.Image) -> np.ndarray:
         mode = image.mode
         image = np.asarray(image, dtype=np.float32)
         if mode in ("L", "RGB"):
@@ -122,27 +121,27 @@ class TorchvisionBackend(ImageBackend):
     `ImageBackend for the `torchvision <https://pytorch.org/`_ package.
     """
 
+    def __init__(self):
+        from torchvision.transforms import functional as F
+
+        self._F = F
+
     @property
-    def native_image_type(self) -> Type[torchvisionImageType]:
-        return torchvisionImageType
+    def native_image_type(self) -> Type[torch.Tensor]:
+        return torch.Tensor
 
-    def import_image(self, file: str) -> torchvisionImageType:
+    def import_image(self, file: str) -> torch.Tensor:
         pil_image = Image.open(file)
-        return torchvision.transforms.functional.to_tensor(pil_image)
+        return self._F.to_tensor(pil_image)
 
-    def export_image(self, image: torchvisionImageType) -> np.ndarray:
+    def export_image(self, image: torch.Tensor) -> np.ndarray:
         return image.detach().cpu().permute((1, 2, 0)).numpy()
 
 
-BUILTIN_IMAGE_BACKENDS = OrderedDict(
-    [
-        ("imageio", ImageioBackend() if imageioImageType is not None else None),
-        ("PIL", PILBackend() if PILImageType is not None else None),
-        (
-            "torchvision",
-            TorchvisionBackend() if torchvisionImageType is not None else None,
-        ),
-    ]
+BUILTIN_IMAGE_BACKENDS = (
+    ("imageio", ImageioBackend),
+    ("PIL", PILBackend),
+    ("torchvision", TorchvisionBackend),
 )
 
 
@@ -152,10 +151,11 @@ def builtin_image_backends():
     Returns:
         OrderedDict[str, Backend]
     """
-    return OrderedDict(
-        [
-            (name, backend)
-            for name, backend in BUILTIN_IMAGE_BACKENDS.items()
-            if backend is not None
-        ]
-    )
+    backends = OrderedDict(())
+    for name, backend_class in BUILTIN_IMAGE_BACKENDS:
+        try:
+            backends[name] = backend_class()
+        except ImportError:
+            pass
+
+    return backends
