@@ -1,7 +1,8 @@
 from os import path
 from itertools import combinations
 from pyimagetest import ImageTestcase
-from pyimagetest.backend import BUILTIN_IMAGE_BACKENDS, builtin_image_backends
+from pyimagetest import builtin_image_backends
+from pyimagetest.backends.builtin import BUILTIN_IMAGE_BACKENDS_META
 
 
 class Tester(ImageTestcase):
@@ -13,7 +14,7 @@ class Tester(ImageTestcase):
         return path.join(here, "test_image.png")
 
     def test_backend_availability(self) -> None:
-        backend_names, _ = zip(*BUILTIN_IMAGE_BACKENDS)
+        backend_names = [meta.name for meta in BUILTIN_IMAGE_BACKENDS_META]
         available_backend_names = builtin_image_backends().keys()
         not_available_backend_names = set(backend_names) - set(available_backend_names)
         if not_available_backend_names:

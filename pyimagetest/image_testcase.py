@@ -1,7 +1,7 @@
 from typing import Any, Union, Optional
 import unittest
 import numpy as np
-from .backend import ImageBackend, builtin_image_backends
+from .backends import ImageBackend, builtin_image_backends
 
 __all__ = ["ImageTestcase"]
 
