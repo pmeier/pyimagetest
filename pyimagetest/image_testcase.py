@@ -1,4 +1,5 @@
 from typing import Any, Union, Optional
+from collections import OrderedDict
 import unittest
 import numpy as np
 from .backends import ImageBackend, builtin_image_backends
@@ -13,15 +14,24 @@ class ImageTestcase(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.backends = builtin_image_backends()
+        self.backends = OrderedDict(())
+        for name, backend in builtin_image_backends().items():
+            self.add_image_backend(name, backend)
 
-    def add_image_backend(self, name: str, backend: ImageBackend) -> None:
+    def add_image_backend(
+        self, name: str, backend: ImageBackend, allow_duplicate_type: bool = False
+    ) -> None:
         """Adds custom image backend to the list of available backends.
 
         Args:
             name (str): Name of the backend
             backend (ImageBackend): Backend
         """
+        native_image_types = [
+            backend.native_image_type for backend in self.backends.values()
+        ]
+        if not allow_duplicate_type and backend.native_image_type in native_image_types:
+            raise RuntimeError
         self.backends[name] = backend
 
     def remove_image_backend(self, name: str) -> None:
