@@ -19,7 +19,7 @@ import unittest
 import pyimagetest
 
 
-class Tester(pyimagetest.ImageTestcase, unittest.TestCase):
+class Tester(pyimagetest.ImageTestCase, unittest.TestCase):
     @property
     def default_test_image_file(self):
         return "path/to/default/test/image/file"

@@ -4,10 +4,10 @@ import unittest
 import numpy as np
 from .backends import ImageBackend, builtin_image_backends
 
-__all__ = ["ImageTestcase"]
+__all__ = ["ImageTestCase"]
 
 
-class ImageTestcase(unittest.TestCase):
+class ImageTestCase(unittest.TestCase):
     """Utility class for unit testing with images. This class is meant for double
     inheritance together with unittest.Testcase.
     """
