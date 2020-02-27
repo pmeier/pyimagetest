@@ -42,26 +42,20 @@ class ImageTestCase(unittest.TestCase):
         """
         del self.backends[name]
 
-    def default_image_backend(self) -> Optional[Union[ImageBackend, str]]:
-        return None
+    def default_image_backend(self) -> Union[ImageBackend, str]:
+        raise NotImplementedError
 
-    @property
-    def has_default_image_backend(self) -> bool:
-        return self.default_image_backend() is not None
-
-    def default_image_file(self) -> Optional[str]:
+    def default_image_file(self) -> str:
         """Returns the path to the default test image file
         Returns:
             str
         """
-        return None
-
-    @property
-    def has_default_image_file(self) -> bool:
-        return self.default_image_file() is not None
+        raise NotImplementedError
 
     def load_image(
-        self, backend: Optional[Union[ImageBackend, str]], file: Optional[str] = None
+        self,
+        file: Optional[str] = None,
+        backend: Optional[Union[ImageBackend, str]] = None,
     ) -> Any:
         """Loads an image with the given image backend. If no file is given, the
         default test image is loaded.
@@ -75,33 +69,43 @@ class ImageTestCase(unittest.TestCase):
             Any
         """
 
+        def parse_file(file: Optional[str]) -> str:
+            if isinstance(file, str):
+                return file
+            elif file is None:
+                try:
+                    return self.default_image_file()
+                except NotImplementedError:
+                    msg = (
+                        "Override ImageTestCase.default_image_file() to be able "
+                        "to call ImageTestCase.load_image() without file parameter."
+                    )
+                    raise RuntimeError(msg)
+            else:
+                raise TypeError
+
         def parse_backend(backend: Optional[Union[ImageBackend, str]]) -> ImageBackend:
             if isinstance(backend, ImageBackend):
                 return backend
-            elif backend is None:
-                default_backend = self.default_image_backend()
-                if default_backend is None:
-                    raise RuntimeError
-                backend = default_backend
+
+            if backend is None:
+                try:
+                    backend = self.default_image_backend()
+                except NotImplementedError:
+                    msg = (
+                        "Override ImageTestCase.default_image_backend() to be able "
+                        "to call ImageTestCase.load_image() without backend."
+                        "parameter"
+                    )
+                    raise RuntimeError(msg)
 
             if isinstance(backend, str):
                 return self.backends[backend]
             else:
                 raise TypeError
 
-        def parse_file(file: Optional[str]) -> str:
-            if isinstance(file, str):
-                return file
-            elif file is None:
-                default_file = self.default_image_file()
-                if default_file is None:
-                    raise RuntimeError
-                return default_file
-            else:
-                raise TypeError
-
-        backend = parse_backend(backend)
         file = parse_file(file)
+        backend = parse_backend(backend)
         return backend.import_image(file)
 
     def assertImagesAlmostEqual(

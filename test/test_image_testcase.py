@@ -23,8 +23,6 @@ class Tester(ImageTestCase):
 
     def test_io(self) -> None:
         for backend1, backend2 in combinations(self.backends.values(), 2):
-            image1 = self.load_image(backend1)
-            image2 = self.load_image(backend2)
-            self.assertImagesAlmostEqual(
-                image1, image2, backend1=backend1, backend2=backend2
-            )
+            image1 = self.load_image(backend=backend1)
+            image2 = self.load_image(backend=backend2)
+            self.assertImagesAlmostEqual(image1, image2)
