@@ -43,14 +43,14 @@ class ImageTestCase(unittest.TestCase):
         del self.backends[name]
 
     def default_image_backend(self) -> Union[ImageBackend, str]:
-        raise NotImplementedError
+        raise RuntimeError
 
     def default_image_file(self) -> str:
         """Returns the path to the default test image file
         Returns:
             str
         """
-        raise NotImplementedError
+        raise RuntimeError
 
     def load_image(
         self,
@@ -75,7 +75,7 @@ class ImageTestCase(unittest.TestCase):
             elif file is None:
                 try:
                     return self.default_image_file()
-                except NotImplementedError:
+                except RuntimeError:
                     msg = (
                         "Override ImageTestCase.default_image_file() to be able "
                         "to call ImageTestCase.load_image() without file parameter."
@@ -91,7 +91,7 @@ class ImageTestCase(unittest.TestCase):
             if backend is None:
                 try:
                     backend = self.default_image_backend()
-                except NotImplementedError:
+                except RuntimeError:
                     msg = (
                         "Override ImageTestCase.default_image_backend() to be able "
                         "to call ImageTestCase.load_image() without backend."
