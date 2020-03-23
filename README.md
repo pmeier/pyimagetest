@@ -4,4 +4,4 @@
 
 `pyimagetest` provides utilities for unit testing with images. 
 
-For installation instructions and usage examples please consult the documentation [hosted on readthedocs.com](https://pyimagetest.readthedocs.io/en/latesthttps://pyimagetest.readthedocs.io/en/latest).
+For installation instructions and usage examples please consult the documentation [hosted on readthedocs.com](https://pyimagetest.readthedocs.io/en/latest).
