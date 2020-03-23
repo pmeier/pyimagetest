@@ -10,7 +10,7 @@ __all__ = [
 
 __name__ = "pyimagetest"
 __description__ = "Utilities for unit testing with images"
-__version__ = "0.2.dev0"
+__version__ = "0.2"
 __url__ = "https://github.com/pmeier/pyimagetest"
 __license__ = "BSD-3"
 __author__ = "Philip Meier"
