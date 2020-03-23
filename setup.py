@@ -21,7 +21,8 @@ builtin_backends_requires = (
 type_check_requires = (
     "mypy",
     # TODO: move to a released version if available
-    "numpy-stubs@https://github.com/numpy/numpy-stubs/archive/master.zip",
+    # FIXME: fix this for PyPI upload
+    # "numpy-stubs@https://github.com/numpy/numpy-stubs/archive/f3c6315738489983f5f37e1477ac68373d71b470.zip",
 )
 
 test_requires = ("pytest",)
