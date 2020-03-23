@@ -18,16 +18,34 @@ builtin_backends_requires = (
     "torchvision",
 )
 
-dev_requires = (
-    *builtin_backends_requires,
+type_check_requires = (
     "mypy",
     # TODO: move to a released version if available
     "numpy-stubs@https://github.com/numpy/numpy-stubs/archive/master.zip",
+)
+
+test_requires = ("pytest",)
+
+doc_requires = (
     "sphinx",
-    "pytest",
     "sphinx_autodoc_typehints",
     "sphinx_rtd_theme",
 )
+
+dev_requires = (
+    *builtin_backends_requires,
+    *type_check_requires,
+    *test_requires,
+    *doc_requires,
+)
+
+extras_require = {
+    "builtin_backends": builtin_backends_requires,
+    "type_check": type_check_requires,
+    "test": test_requires,
+    "doc": doc_requires,
+    "dev": dev_requires,
+}
 
 classifiers = (
     "Development Status :: 3 - Alpha",
@@ -47,12 +65,9 @@ setup(
     author_email=about["__author_email__"],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(where=here, exclude=("test", "docs")),
+    packages=find_packages(where=here, exclude=("third_party_stubs", "test", "docs")),
     install_requires=install_requires,
-    extras_require={
-        "builtin_backends": builtin_backends_requires,
-        "dev": dev_requires,
-    },
+    extras_require=extras_require,
     python_requires=">=3.6",
     classifiers=classifiers,
 )
