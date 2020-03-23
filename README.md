@@ -1,34 +1,7 @@
-# pyimagetest
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Build Status](https://travis-ci.org/pmeier/pyimagetest.svg?branch=master)](https://travis-ci.org/pmeier/pyimagetest) [![codecov](https://codecov.io/gh/pmeier/pyimagetest/branch/master/graph/badge.svg)](https://codecov.io/gh/pmeier/pyimagetest) [![Documentation Status](https://readthedocs.org/projects/pyimagetest/badge/?version=latest)](https://pyimagetest.readthedocs.io/en/latest/?badge=latest)
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+# pyimagetest
 
 `pyimagetest` provides utilities for unit testing with images. 
 
-`pyimagetest.ImageTestcase` is an `ABC` meant for double inheritance with `unittest.Testcase`. It adds the `assertImagesAlmostEqual` method. The compared image objects do not have to be from the same `pyimagetest.ImageBackend`. As long as the backend is known to `pyimagetest.ImageTestcase` it is inferred automatically.
-
-Currently the following `ImageBackend`s are supported off-the-shelf:
-- `imageio` 
-- `PIL`
-
-Custom backends can be added by subclassing `ImageBackend`.
-
-## Example usage
-
-```python
-import unittest
-import pyimagetest
-
-
-class Tester(pyimagetest.ImageTestCase, unittest.TestCase):
-    @property
-    def default_test_image_file(self):
-        return "path/to/default/test/image/file"
-    
-    def test_io(self):
-        imageio_image = self.load_image("imageio")
-        pil_image = self.load_image("PIL")
-        self.assertImagesAlmostEqual(imageio_image, pil_image)
-
-if __name__ == "__main__":
-    unittest.main()
-```
+For installation instructions and usage examples please consult the documentation [hosted on readthedocs.com](https://pyimagetest.readthedocs.io/en/latesthttps://pyimagetest.readthedocs.io/en/latest).
