@@ -7,8 +7,8 @@ __all__ = ["imageioBackend"]
 
 
 class imageioBackend(ImageBackend):
-    """
-    `ImageBackend for the `imageio <https://imageio.github.io/>`_ package.
+    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
+    `imageio package <https://imageio.github.io/>`_ .
     """
 
     @property

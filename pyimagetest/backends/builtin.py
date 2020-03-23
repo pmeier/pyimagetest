@@ -1,6 +1,7 @@
-from typing import Union, Optional, Collection
+from typing import Union, Optional, Collection, Dict
 from importlib import import_module
 from collections import OrderedDict
+from .backend import ImageBackend
 
 
 class BackendMeta:
@@ -33,11 +34,11 @@ BUILTIN_IMAGE_BACKENDS_META = (
 )
 
 
-def builtin_image_backends():
-    """Returns all builtin image backends, which are available.
+def builtin_image_backends() -> Dict[str, ImageBackend]:
+    """Returns all available builtin image backends.
 
-    Returns:
-        OrderedDict[str, Backend]
+    ReturnType:
+        OrderedDict[str, ImageBackend]
     """
     available_backends = OrderedDict(())
     for meta in BUILTIN_IMAGE_BACKENDS_META:

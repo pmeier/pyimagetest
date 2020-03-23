@@ -5,8 +5,8 @@ from .backend import ImageBackend
 
 
 class PILBackend(ImageBackend):
-    """
-    `ImageBackend for the `PIL (Pillow) <https://python-pillow.org/`_ package.
+    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
+    `Pillow package <https://python-pillow.org/>`_ .
     """
 
     @property

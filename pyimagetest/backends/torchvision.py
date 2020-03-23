@@ -9,8 +9,8 @@ __all__ = ["torchvisionBackend"]
 
 
 class torchvisionBackend(ImageBackend):
-    """
-    `ImageBackend for the `torchvision <https://pytorch.org/`_ package.
+    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
+    `torchvision package <https://pytorch.org/docs/stable/torchvision/index.html>`_ .
     """
 
     @property
@@ -18,8 +18,7 @@ class torchvisionBackend(ImageBackend):
         return torch.Tensor
 
     def import_image(self, file: str) -> torch.Tensor:
-        pil_image = Image.open(file)
-        return F.to_tensor(pil_image)
+        return F.to_tensor(Image.open(file))
 
     def export_image(self, image: torch.Tensor) -> np.ndarray:
         return image.detach().cpu().permute((1, 2, 0)).numpy()
