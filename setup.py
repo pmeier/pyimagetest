@@ -19,12 +19,16 @@ builtin_backends_requires = (
 )
 
 type_check_requires = (
+    *builtin_backends_requires,
     "mypy",
     # TODO: move to a released version if available
     "numpy-stubs@https://github.com/numpy/numpy-stubs/archive/master.zip",
 )
 
-test_requires = ("pytest",)
+test_requires = (
+    *builtin_backends_requires,
+    "pytest",
+)
 
 doc_requires = (
     "sphinx",
@@ -37,6 +41,7 @@ dev_requires = (
     *type_check_requires,
     *test_requires,
     *doc_requires,
+    "pre-commit",
 )
 
 extras_require = {
@@ -65,7 +70,7 @@ setup(
     author_email=about["__author_email__"],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(where=here, exclude=("third_party_stubs", "test", "docs")),
+    packages=find_packages(where=here, exclude=("docs", "test", "third_party_stubs",)),
     install_requires=install_requires,
     extras_require=extras_require,
     python_requires=">=3.6",
