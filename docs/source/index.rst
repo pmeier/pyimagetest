@@ -1,11 +1,11 @@
 Welcome to pyimagetest's documentation!
 =======================================
 
-If you have ever worked with multiple image backends at the same time you know that
-it can cumbersome to check images from different backends for equality.
-``pyimagetest`` is a Python library that provides utilities for unit testing with
-images. It provides :class:`pyimagetest.image_test_case.ImageTestCase` that enables
-convenient image loading and comparison.
+If you have ever worked with multiple image backends at the same time you know
+that it can cumbersome to check images from different backends for equality.
+``pyimagetest`` is a Python library that provides utilities for unit testing
+with images. It provides :class:`~pyimagetest.image_test_case.ImageTestCase`
+that enables convenient image loading and comparison.
 
 .. _builtin_image_backends:
 

@@ -2,8 +2,8 @@ Installation
 ============
 
 ``pyimagetest`` is a proper Python package and listed on
-`PyPI <https://pypi.org/project/pyimagetest/>`_. To install the latest stable version
-run
+`PyPI <https://pypi.org/project/pyimagetest/>`_. To install the latest stable
+version run
 
 .. code-block:: sh
 
@@ -24,8 +24,8 @@ Installation with builtin backends
 
 Although ``pyimagetest`` has support for some
 :ref:`image backends built in <builtin_image_backends>`,
-by default none are installed. To install the requirements for all builtin backends,
-run the pip command with the ``[builtin_backends]`` extra.
+by default none are installed. To install the requirements for all builtin
+backends, run the pip command with the ``[builtin_backends]`` extra.
 
 .. code-block:: sh
 
@@ -45,7 +45,7 @@ If you want to contribute to ``pyimagetest`` please install from source with the
   pip install .[dev]
 
 Since ``pyimagetest`` uses the 
-`black code formatter <https://github.com/psf/black>`, you should install it as
+`black code formatter <https://github.com/psf/black>`_, you should install it as
 a pre-commit hook:
 
 .. code-block:: sh
