@@ -43,3 +43,11 @@ If you want to contribute to ``pyimagetest`` please install from source with the
   git clone https://github.com/pmeier/pyimagetest
   cd pyimagetest
   pip install .[dev]
+
+Since ``pyimagetest`` uses the 
+`black code formatter <https://github.com/psf/black>`, you should install it as
+a pre-commit hook:
+
+.. code-block:: sh
+
+  pre-commit install
