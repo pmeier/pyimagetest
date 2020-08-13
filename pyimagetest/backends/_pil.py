@@ -3,12 +3,11 @@ from typing import Type
 import numpy as np
 from PIL import Image
 
-from .backend import ImageBackend
+from . import ImageBackend
 
 
 class PILBackend(ImageBackend):
-    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
-    `Pillow package <https://python-pillow.org/>`_ .
+    r"""Backend for `PIL <https://python-pillow.org/>`_ .
     """
 
     @property

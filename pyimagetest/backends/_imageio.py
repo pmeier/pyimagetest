@@ -3,14 +3,13 @@ from typing import Type
 import imageio
 import numpy as np
 
-from .backend import ImageBackend
+from . import ImageBackend
 
-__all__ = ["imageioBackend"]
+__all__ = ["ImageioBackend"]
 
 
-class imageioBackend(ImageBackend):
-    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
-    `imageio package <https://imageio.github.io/>`_ .
+class ImageioBackend(ImageBackend):
+    r"""Backend for `imageio <https://imageio.github.io/>`_ .
     """
 
     @property

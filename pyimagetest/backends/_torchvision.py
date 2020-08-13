@@ -5,14 +5,13 @@ import torch
 from PIL import Image
 from torchvision.transforms import functional as F
 
-from .backend import ImageBackend
+from . import ImageBackend
 
-__all__ = ["torchvisionBackend"]
+__all__ = ["TorchvisionBackend"]
 
 
-class torchvisionBackend(ImageBackend):
-    """:class:`~pyimagetest.backends.backend.ImageBackend` for the
-    `torchvision package <https://pytorch.org/docs/stable/torchvision/index.html>`_ .
+class TorchvisionBackend(ImageBackend):
+    r"""Backend for `torchvision <https://pytorch.org/docs/stable/torchvision>`_ .
     """
 
     @property

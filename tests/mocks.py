@@ -54,7 +54,7 @@ def patch_imports(
 
     __import__ = builtins.__import__
 
-    def patched_import(name, globals, locals, fromlist, level):
+    def patched_import(name, globals=None, locals=None, fromlist=(), level=0):
         if import_error_condition(name, globals, locals, fromlist, level):
             raise ImportError
 

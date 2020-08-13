@@ -14,7 +14,9 @@ def import_package_under_test():
 put = import_package_under_test()
 
 
-def test_importability(subtests):
+def test_importability(subtests, mocker):
+    patch_imports(("imageio", "PIL", "torchvision"), mocker=mocker)
+
     def is_private(name):
         return name.rsplit(".", 1)[-1].startswith("_")
 
