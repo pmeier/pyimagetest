@@ -1,17 +1,17 @@
-from os import path
 from itertools import combinations
-from pyimagetest import ImageTestCase
-from pyimagetest import builtin_image_backends
+from os import path
+
+from pyimagetest import ImageTestCase, builtin_image_backends
 from pyimagetest.backends.builtin import BUILTIN_IMAGE_BACKENDS_META
 
 
 class Tester(ImageTestCase):
     def default_image_file(self) -> str:
-        # The test image was downloaded from
+        # The tests image was downloaded from
         # http://www.r0k.us/graphics/kodak/kodim15.html
         # and is cleared for unrestricted usage
         here = path.abspath(path.dirname(__file__))
-        return path.join(here, "test_image.png")
+        return path.join(here, "..", "..", "assets", "test_image.png")
 
     def test_backend_availability(self) -> None:
         backend_names = [meta.name for meta in BUILTIN_IMAGE_BACKENDS_META]

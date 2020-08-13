@@ -4,7 +4,29 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Path setup --------------------------------------------------------------
+# -- Imports ---------------------------------------------------------------------------
+
+import os
+from datetime import datetime
+from distutils.util import strtobool
+from importlib_metadata import metadata
+from os import path
+
+# -- Run config ------------------------------------------------------------------------
+
+
+def get_bool_env_var(name, default=False):
+    try:
+        return bool(strtobool(os.environ[name]))
+    except KeyError:
+        return default
+
+
+run_by_github_actions = get_bool_env_var("GITHUB_ACTIONS")
+run_by_rtd = get_bool_env_var("READTHEDOCS")
+run_by_ci = run_by_github_actions or run_by_rtd or get_bool_env_var("CI")
+
+# -- Path setup ------------------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -14,42 +36,65 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-
-# -- Project information -----------------------------------------------------
-from os import path
-from datetime import datetime
-
-here = path.abspath(path.dirname(__file__))
-
-about = {}
-with open(path.join(here, "..", "..", "pyimagetest", "__about__.py"), "r") as fh:
-    exec(fh.read(), about)
-
-project = about["__name__"]
-copyright = f"2019 - {datetime.now().year}, {about['__author__']}"
-author = about["__author__"]
-
-# The full version, including alpha/beta/rc tags
-release = about["__version__"]
+PROJECT_ROOT = path.abspath(path.join(path.abspath(path.dirname(__file__)), "..", ".."))
 
 
-# -- General configuration ---------------------------------------------------
+# -- Project information ---------------------------------------------------------------
+
+meta = metadata("pyimagetest")
+
+project = meta["name"]
+author = meta["author"]
+copyright = f"{datetime.now().year}, {author}"
+release = meta["version"]
+version = ".".join(release.split(".")[:2])
+
+
+# -- General configuration -------------------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "sphinx_autodoc_typehints"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.doctest",
+]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
+# templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+# exclude_patterns = []
 
 
-# -- Options for HTML output -------------------------------------------------
+# -- Config for intersphinx  -----------------------------------------------------------
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3.6", None),
+    "numpy": ("https://numpy.org/doc/1.18/", None),
+    "imageio": ("https://imageio.readthedocs.io/en/stable/", None),
+    "PIL": ("https://pillow.readthedocs.io/en/stable/", None),
+    "torch": ("https://pytorch.org/docs/stable/", None),
+    "torchvision": ("https://pytorch.org/docs/stable/", None),
+}
+
+
+# -- Options for Latex / MathJax  ------------------------------------------------------
+
+with open("custom_cmds.tex", "r") as fh:
+    custom_cmds = fh.read()
+
+latex_elements = {"preamble": custom_cmds}
+
+mathjax_inline = [r"\(" + custom_cmds, r"\)"]
+mathjax_display = [r"\[" + custom_cmds, r"\]"]
+
+
+# -- Options for HTML output -----------------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.

@@ -1,6 +1,8 @@
 from typing import Type
-import numpy as np
+
 import imageio
+import numpy as np
+
 from .backend import ImageBackend
 
 __all__ = ["imageioBackend"]

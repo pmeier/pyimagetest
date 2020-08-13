@@ -1,6 +1,7 @@
-from typing import Union, Optional, Collection, Dict
-from importlib import import_module
 from collections import OrderedDict
+from importlib import import_module
+from typing import Collection, Dict, Optional, Union
+
 from .backend import ImageBackend
 
 

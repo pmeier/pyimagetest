@@ -125,5 +125,3 @@ the test case::
 .. note::
   If you create a custom backend based on an open-source Python package, consider
   contributing it to ``pyimagetest``.
-
-

@@ -24,4 +24,5 @@ As of now the following image backends are builtin:
   :maxdepth: 2
 
   Getting Started <getting_started>
-  Reference <reference>
+  Contributing <contributing>
+  Reference <api>

@@ -1,7 +1,9 @@
-from typing import Any, Union, Optional
-from collections import OrderedDict
 import unittest
+from collections import OrderedDict
+from typing import Any, Optional, Union
+
 import numpy as np
+
 from .backends import ImageBackend, builtin_image_backends
 
 __all__ = ["ImageTestCase"]
