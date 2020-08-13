@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, cast
 
 import numpy as np
 import torch
@@ -11,8 +11,7 @@ __all__ = ["TorchvisionBackend"]
 
 
 class TorchvisionBackend(ImageBackend):
-    r"""Backend for `torchvision <https://pytorch.org/docs/stable/torchvision>`_ .
-    """
+    r"""Backend for `torchvision <https://pytorch.org/docs/stable/torchvision>`_ ."""
 
     @property
     def native_image_type(self) -> Type[torch.Tensor]:
@@ -22,4 +21,4 @@ class TorchvisionBackend(ImageBackend):
         return F.to_tensor(Image.open(file))
 
     def export_image(self, image: torch.Tensor) -> np.ndarray:
-        return image.detach().cpu().permute((1, 2, 0)).numpy()
+        return cast(np.ndarray, image.detach().cpu().permute((1, 2, 0)).numpy())

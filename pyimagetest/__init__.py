@@ -29,8 +29,7 @@ else:
 def add_image_backend(
     name: str, backend: ImageBackend, allow_duplicate_type: bool = False
 ) -> None:
-    """Adds custom :class:`~pyimagetest.backends.backend.ImageBackend` to
-    the available backends.
+    """Adds custom backend to the available backends.
 
     Args:
         name: Name of the backend
@@ -66,8 +65,7 @@ def add_image_backend(
 
 
 def remove_image_backend(name: str) -> None:
-    """Removes an :class:`~pyimagetest.backends.backend.ImageBackend` from
-    the known backends.
+    """Removes a backend from the known backends.
 
     Args:
         name: Name of the backend to be removed
@@ -76,8 +74,7 @@ def remove_image_backend(name: str) -> None:
 
 
 def infer_image_backend(image: Any) -> ImageBackend:
-    """Infers the corresponding :class:`~pyimagetest.backends.backend.ImageBackend`
-    from ``image``.
+    """Infers the corresponding backend from the ``image``.
 
     Args:
         image: Image with type of any known backend
@@ -100,15 +97,14 @@ def assert_images_almost_equal(
     mae: float = 1e-2,
     backend1: Optional[Union[ImageBackend, str]] = None,
     backend2: Optional[Union[ImageBackend, str]] = None,
-):
+) -> None:
     """Image equality assertion.
 
     Args:
         image1: Image 1
         image2: Image 2
-        mae: Maximum acceptable
-            `mean absolute error (MAE) <https://en.wikipedia.org/wiki/Mean_absolute_error>`_.
-            Defaults to ``1e-2``.
+        mae: Maximum acceptable `mean absolute error (MAE)
+            <https://en.wikipedia.org/wiki/Mean_absolute_error>`_. Defaults to ``1e-2``.
         backend1:
             :class:`~pyimagetest.backends.ImageBackend` or its name
             for ``image1``. If omitted, the backend is inferred from ``image1`` with

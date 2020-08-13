@@ -20,9 +20,10 @@ max-line-length = 88
 max-doc-length = 88
 per-file-ignores =
     __init__.py: F401, F403, F405
-    conftest.py: F401, F403, F405
-    docs/*: D1
-    tests/*: D1
+    docs/*.py: D1
+    tests/*.py: D1
+    tests/conftest.py: F401, F403, F405, D1
+    pyimagetest/backends/_*.py: D102
 show_source = True
 statistics = True
 doctests = True

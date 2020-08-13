@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, cast
 
 import imageio
 import numpy as np
@@ -9,8 +9,7 @@ __all__ = ["ImageioBackend"]
 
 
 class ImageioBackend(ImageBackend):
-    r"""Backend for `imageio <https://imageio.github.io/>`_ .
-    """
+    r"""Backend for `imageio <https://imageio.github.io/>`_ ."""
 
     @property
     def native_image_type(self) -> Type[np.ndarray]:
@@ -20,4 +19,4 @@ class ImageioBackend(ImageBackend):
         return imageio.imread(file)
 
     def export_image(self, image: np.ndarray) -> np.ndarray:
-        return image.astype(np.float32) / 255.0
+        return cast(np.ndarray, image.astype(np.float32) / 255.0)

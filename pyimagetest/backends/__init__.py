@@ -9,24 +9,24 @@ __all__ = ["ImageBackend", "builtin_image_backends"]
 
 
 class ImageBackend(ABC):
-    r"""ABC for image backends. Each subclass has to implement the
-    :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type` as
-    well as the basic I/O methods
-    :meth:`~pyimagetest.backends.backend.ImageBackend.import_image`
-    and :meth:`~pyimagetest.backends.backend.ImageBackend.export_image`.
+    r"""ABC for image backends.
+
+    Each subclass has to implement the :attr:`~native_image_type` as well as the basic
+    I/O methods :meth:`~import_image` and :meth:`~export_image`.
     """
 
     @property
     @abstractmethod
     def native_image_type(self) -> Type[Any]:
-        r"""Native image type of the backend. This is used to infer the
+        r"""Native image type of the backend.
+
+        This is used to infer the
         :class:`~pyimagetest.backends.backend.ImageBackend` from a given image.
         """
         pass
 
     def __contains__(self, image: Any) -> bool:
-        r"""Checks if the given ``image`` is native for the
-        :class:`~pyimagetest.backends.backend.ImageBackend`
+        r"""Checks if ``image`` is native for the backend.
 
         Args:
             image: Image to be checked
@@ -35,9 +35,7 @@ class ImageBackend(ABC):
 
     @abstractmethod
     def import_image(self, file: str) -> Any:
-        r"""Imports an image form ``file`` into the
-        :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type` of
-        the backend.
+        r"""Imports an image from ``file``.
 
         Args:
             file: Path to the file that should be imported.
@@ -46,10 +44,8 @@ class ImageBackend(ABC):
 
     @abstractmethod
     def export_image(self, image: Any) -> np.ndarray:
-        r"""Exports an image of the
-        :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type`
-        into a
-        `numpy.ndarray <https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_
+        r"""Exports an image to :class:`numpy.ndarray`.
+
         The output is of ``shape == (height, width, channels)`` and of
         ``dtype == numpy.float32``.
 
@@ -76,8 +72,7 @@ BUILTIN_IMAGE_BACKENDS_META = (
 
 
 def builtin_image_backends() -> Dict[str, ImageBackend]:
-    r"""Returns all available builtin image backends.
-    """
+    r"""Returns all available builtin image backends."""
     available_backends = OrderedDict()
     for meta in BUILTIN_IMAGE_BACKENDS_META:
         try:
