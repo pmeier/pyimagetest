@@ -1,29 +1,14 @@
-pyimagetest package
-===================
-
-Subpackages
------------
-
-.. toctree::
-
-   pyimagetest.backends
-
-Submodules
-----------
-
-pyimagetest.image\_test\_case module
-------------------------------------
-
-.. automodule:: pyimagetest.image_test_case
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
+``pyimagetest``
+===============
 
 .. automodule:: pyimagetest
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
+.. autoclass:: ImageBackend
+  :members:
+    native_image_type,
+    import_image,
+    export_image
+.. autofunction:: add_image_backend
+.. autofunction:: remove_image_backend
+.. autofunction:: infer_image_backend
+.. autofunction:: assert_images_almost_equal

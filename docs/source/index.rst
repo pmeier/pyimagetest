@@ -25,4 +25,4 @@ As of now the following image backends are builtin:
 
   Getting Started <getting_started>
   Contributing <contributing>
-  Reference <api>
+  Package Reference <api/index>

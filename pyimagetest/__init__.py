@@ -35,22 +35,18 @@ def add_image_backend(
         name: Name of the backend
         backend: Backend
         allow_duplicate_type: If ``True``, no check for duplicate
-         :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type` s
-         is performed. Defaults to ``False``.
+         :attr:`~pyimagetest.ImageBackend.native_image_type` s is performed. Defaults
+         to ``False``.
 
     Raises:
-        RuntimeError: If another :class:`~pyimagetest.backends.backend.ImageBackend`
-            with the same
-            :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type`
-            already present and ``allow_duplicate_type`` is ``False``.
+        RuntimeError: If another :class:`~pyimagetest.ImageBackend` with the same
+            :attr:`~pyimagetest.ImageBackend.native_image_type` already present and
+            ``allow_duplicate_type`` is ``False``.
 
     .. note::
-        If you add an :class:`~pyimagetest.backends.backend.ImageBackend`
-        with a duplicate
-        :attr:`~pyimagetest.backends.backend.ImageBackend.native_image_type`,
-        the automatic backend inference with
-        :meth:`~pyimagetest.image_test_case.ImageTestCase.infer_image_backend`
-        might not work correctly.
+        If you add an :class:`~pyimagetest.ImageBackend` with a duplicate
+        :attr:`~pyimagetest.ImageBackend.native_image_type`, the automatic backend
+        inference with :func:`infer_image_backend` might not work correctly.
     """
     native_image_types = [
         backend.native_image_type for backend in image_backends.values()
@@ -106,13 +102,11 @@ def assert_images_almost_equal(
         mae: Maximum acceptable `mean absolute error (MAE)
             <https://en.wikipedia.org/wiki/Mean_absolute_error>`_. Defaults to ``1e-2``.
         backend1:
-            :class:`~pyimagetest.backends.ImageBackend` or its name
-            for ``image1``. If omitted, the backend is inferred from ``image1`` with
-            :func:`~infer_image_backend`.
+            :class:`~pyimagetest.ImageBackend` or its name for ``image1``. If omitted,
+            the backend is inferred from ``image1`` with :func:`~infer_image_backend`.
         backend2:
-            :class:`~pyimagetest.backends.ImageBackend` or its name
-            for ``image2``. If omitted, the backend is inferred from ``imag2`` with
-            :func:`~infer_image_backend`.
+            :class:`~pyimagetest.ImageBackend` or its name for ``image2``. If omitted,
+            the backend is inferred from ``imag2`` with :func:`~infer_image_backend`.
 
     Raises:
         AssertionError: If `image1` and `image2` are not equal up to the
